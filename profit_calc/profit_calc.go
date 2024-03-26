@@ -6,22 +6,28 @@ import (
 
 func main() {
 
-	var revenue int
-	var expenses int
-	var taxRate float64
+	revenue := getUserInput("Revenue: ")
+	expenses := getUserInput("Expenses: ")
+	taxRate := getUserInput("Tax Rate: ")
 
-	fmt.Print("Revenue: ")
-	fmt.Scan(&revenue)
-	fmt.Print("Expenses: ")
-	fmt.Scan(&expenses)
-	fmt.Print("Tax Rate: ")
-	fmt.Scan(&taxRate)
+	earningsBeforeTax, earningsAfterTax, ratio := calculator(revenue, expenses, taxRate)
 
+	fmt.Printf("Earnings Before Tax: %.1f\n", earningsBeforeTax)
+	fmt.Printf("Earnings After Tax: %.1f\n", earningsAfterTax)
+	fmt.Printf("Profit ratio: %.3f\n", ratio)
+}
+
+func getUserInput(label string) float64 {
+	var userInput float64
+	fmt.Print(label)
+	fmt.Scan(&userInput)
+	return userInput
+}
+
+func calculator(revenue, expenses, taxRate float64) (float64, float64, float64) {
 	earningsBeforeTax := revenue - expenses
 	earningsAfterTax := float64(earningsBeforeTax) * (1 - taxRate/100)
 	ratio := float64(earningsBeforeTax) / earningsAfterTax
 
-	fmt.Println("Earnings Before Tax: ", earningsBeforeTax)
-	fmt.Println("Earnings After Tax: ", earningsAfterTax)
-	fmt.Println("Profit ratio: ", ratio)
+	return earningsBeforeTax, earningsAfterTax, ratio
 }
