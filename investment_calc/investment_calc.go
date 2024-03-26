@@ -5,11 +5,12 @@ import (
 	"math"
 )
 
+const inflationRate = 2.5
+
 func main() {
 	investmentAmount := 1000.0
 	expectedReturnRate := 5.5
 	years := 10.0
-	const inflationRate = 2.5
 
 	fmt.Print("Investment Amount: ")
 	fmt.Scan(&investmentAmount)
@@ -20,9 +21,17 @@ func main() {
 	fmt.Print("Years: ")
 	fmt.Scan(&years)
 
-	futureValue := investmentAmount * math.Pow(1+expectedReturnRate/100, years)
-	futureRealValue := futureValue / math.Pow(1+inflationRate/100, years)
+	futureValue, futureRealValue := calcInvestments(investmentAmount, expectedReturnRate, years)
+
+	//futureValue := investmentAmount * math.Pow(1+expectedReturnRate/100, years)
+	//futureRealValue := futureValue / math.Pow(1+inflationRate/100, years)
 
 	fmt.Println(futureValue)
 	fmt.Println(futureRealValue)
+}
+
+func calcInvestments(investmentAmount, expectedReturnRate, years float64) (float64, float64) {
+	futVal := investmentAmount * math.Pow(1+expectedReturnRate/100, years)
+	realFutVal := futVal / math.Pow(1+inflationRate/100, years)
+	return futVal, realFutVal
 }
