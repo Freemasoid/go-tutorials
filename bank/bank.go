@@ -1,11 +1,46 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"os"
+	"strconv"
+)
+
+const accBalanceFile = "balance.txt"
+
+func writeBalanceToFile(value float64) {
+	balance := fmt.Sprint(value)
+	os.WriteFile(accBalanceFile, []byte(balance), 0644)
+}
+
+func getBalanceFromFile() (float64, error) {
+	data, err := os.ReadFile(accBalanceFile)
+
+	if err != nil {
+		return 1000, errors.New("failed to find balance.txt")
+	}
+
+	balanceText := string(data)
+	balance, err := strconv.ParseFloat(balanceText, 64)
+
+	if err != nil {
+		return 1000, errors.New("failed to parse stored balance value")
+	}
+
+	return balance, nil
+}
 
 func main() {
-	var curBalance float64 = 1000.0
+	var curBalance, err = getBalanceFromFile()
 	var choice int
 	var enterVal float64
+
+	if err != nil {
+		fmt.Println("ERROR")
+		fmt.Println(err)
+		fmt.Println("-----------------")
+	}
 
 	fmt.Println("Welcome to Go Bank!")
 	fmt.Println("What do you want to do?")
@@ -28,6 +63,7 @@ func main() {
 			fmt.Scan(&enterVal)
 			curBalance += enterVal
 			fmt.Println("Your current balance:", curBalance, "EUR")
+			writeBalanceToFile(curBalance)
 		case 3:
 			fmt.Println("How much do you want to withdraw?")
 			fmt.Scan(&enterVal)
@@ -36,6 +72,7 @@ func main() {
 			} else {
 				curBalance -= enterVal
 				fmt.Println("Your current balance:", curBalance, "EUR")
+				writeBalanceToFile(curBalance)
 			}
 		case 4:
 			fmt.Println("Goodbye! Have a nice day!")
