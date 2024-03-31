@@ -24,12 +24,18 @@ func main() {
 		createdAt: time.Now(),
 	}
 
-	outputUserData(&appUser)
+	appUser.outputUserData()
+	appUser.clearUserName()
 }
 
-func outputUserData(u *User) {
+func (u User) outputUserData() {
 	// ...
 	fmt.Println(u.firstName, u.lastName, u.birthDate)
+}
+
+func (u *User) clearUserName() {
+	u.firstName = ""
+	u.lastName = ""
 }
 
 func getUserData(promptText string) string {
